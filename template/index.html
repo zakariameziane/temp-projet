@@ -1,26 +1,87 @@
-<head>
-    {% load static %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% extends 'base.html' %}
+{% load static %}
 
-</head>
-<body>
-    {% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
-  <div class="navbar"  style="background-image: url({% static 'images/HD.jpg' %}) ; ">
-    <nav >
-        <h2 class="logo">IOT</h2>
+<div class="dashboard">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1><i class="fas fa-temperature-low"></i> DHT11 Sensor Dashboard</h1>
+        <p>Real-time environmental monitoring system</p>
+    </div>
 
-            <ul>
-                   <li>  <a href="{% url 'table' %}" >Table</a></li>
-                    <li>  <a href="{% url 'myChartTemp' %}" >Chart Temp</a></li>
-                    <li>  <a href="{% url 'myChartHum' %}" >Chart Hum</a></li>
-                    <li>  <a href="{% url 'json' %}" >Json</a></li>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card temperature">
+            <div class="stat-icon">
+                <i class="fas fa-thermometer-half"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Temperature</h3>
+                <p class="stat-value">{{ latest.temp }} °C</p>
+                <p class="stat-meta"><i class="fas fa-arrow-up"></i> 2.5% from yesterday</p>
+            </div>
+        </div>
 
-            </ul>
-            <p> </p>
+        <div class="stat-card humidity">
+            <div class="stat-icon">
+                <i class="fas fa-tint"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Humidity</h3>
+                <p class="stat-value">{{ latest.hum }}%</p>
+                <p class="stat-meta"><i class="fas fa-arrow-down"></i> 1.2% from yesterday</p>
+            </div>
+        </div>
+    </div>
 
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2><i class="fas fa-rocket"></i> Quick Actions</h2>
+        <div class="action-grid">
+            <a href="{% url 'table' %}" class="action-card">
+                <i class="fas fa-table"></i>
+                <span>Data Table</span>
+            </a>
+            <a href="{% url 'myChartTemp' %}" class="action-card">
+                <i class="fas fa-chart-line"></i>
+                <span>Temperature Chart</span>
+            </a>
+            <a href="{% url 'myChartHum' %}" class="action-card">
+                <i class="fas fa-water"></i>
+                <span>Humidity Chart</span>
+            </a>
+            <a href="{% url 'json' %}" class="action-card">
+                <i class="fas fa-code"></i>
+                <span>Raw Data</span>
+            </a>
+        </div>
+    </div>
 
-    </nav>
+    <!-- Recent Readings -->
+    <div class="recent-readings">
+        <div class="section-header">
+            <h2><i class="fas fa-history"></i> Recent Readings</h2>
+            <a href="{% url 'table' %}" class="btn btn-outline">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="readings-table">
+            <div class="table-header">
+                <span>Time</span>
+                <span>Temperature</span>
+                <span>Humidity</span>
+            </div>
+            {% for reading in recent %}
+            <div class="table-row">
+                <span>{{ reading.date|time }}</span>
+                <span class="temp-value">{{ reading.temp }} °C</span>
+                <span class="humidity-value">{{ reading.hum }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-
-</body>
+{% endblock %}

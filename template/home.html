@@ -3,87 +3,386 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title>Accueil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dashboard - Home</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-         {% load static %}
-        body {
-            background-image: url("{% static 'images/1_Blog_Featured_Image-scaled-1.jpg' %}");
-            background-size: cover;
-            background-position: left top;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: Arial, sans-serif;
-            color: white;
+        :root {
+            --primary-blue: #1976D2;
+            --dark-blue: #0D47A1;
+            --sky-blue: #64B5F6;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --light-bg: #F5F9FF;
+            --dark-text: #2C3E50;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url("{% static 'images/bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            color: var(--white);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: top;
-            height: 50vh;
-        }
-
-        .content {
-            text-align: center;
-
-        }
-
-        h1 {
-            color: white;
-            margin-top: 0;
-            background-color: rgba(0, 0, 0, 0); /* Semi-transparent black background */
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        p {color: white;
-            margin: 20px auto;
-            width: 80%;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        ul {
+            justify-content: center;
             position: relative;
-            top: 100px;
-            left: 500px;
-            list-style-type: none;
-            padding: 0;
-            margin: 20px 0;
         }
 
-        ul li {
-            display: inline;
-            margin: 0 10px;
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 71, 161, 0.7);
+            z-index: -1;
         }
 
-        ul li a {
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, var(--white), var(--sky-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            padding: 12px 30px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
             text-decoration: none;
-            padding: 10px 20px;
-            background-color: blue;
-            color: white;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
         }
 
-        ul li a:hover {
-            background-color: darkgreen;
-            transform: scale(1.05);
+        .cta-button:hover {
+            background: var(--sky-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .auth-card {
+            display: flex;
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.8s ease-in-out;
+        }
+
+        .auth-form {
+            flex: 1;
+            padding: 3rem;
+            background: var(--white);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .auth-header h2 {
+            color: var(--dark-text);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .auth-footer a:hover {
+            color: var(--dark-blue);
+            text-decoration: underline;
+        }
+
+        .auth-illustration {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .illustration-overlay {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            color: var(--white);
+            text-align: left;
+        }
+
+        .illustration-overlay h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .illustration-overlay p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            background: #FFEBEE;
+            color: #C62828;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .alert i {
+            margin-right: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-card {
+                flex-direction: column;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .auth-illustration {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>Bienvenue sur la page d'accueil</h1>
-        <p>
-            Bienvenue sur notre site dédié à l'Internet des objets (IoT) ! Ici, vous pouvez afficher les données de température et d'humidité en temps réel sous forme de tableaux et de graphiques, ainsi que consulter les données JSON. Utilisez le bouton ci-dessous pour accéder aux différentes pages.
-        </p>
-        <ul>
-            <li><a href="{% url 'table' %}">application</a></li>
+    <div class="container">
+        <div class="hero">
+            <h1>IoT Monitoring Dashboard</h1>
+            <p>Track real-time temperature and humidity data with beautiful visualizations and comprehensive analytics for your environment.</p>
 
-        </ul>
+            <div class="cta-buttons">
+                <a href="{% url 'table' %}" class="cta-button">
+                    <i class="fas fa-chart-line"></i> View Dashboard
+                </a>
+                <a href="#login" class="cta-button">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+            </div>
+        </div>
+
+        <div class="auth-container" id="login">
+            <div class="auth-card">
+                <!-- Login Form -->
+                <div class="auth-form">
+                    <div class="auth-header">
+                        <img src="{% static 'images/logo.svg' %}" alt="Logo" class="auth-logo">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to access your IoT dashboard</p>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert">
+                        <i class="fas fa-exclamation-circle"></i> Invalid username or password.
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="username"><i class="fas fa-user"></i> Username</label>
+                            <input type="text" id="username" name="username" required placeholder="Enter your username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        </div>
+
+                        <button type="submit" class="btn">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#">Contact administrator</a></p>
+                        <p><a href="#"><i class="fas fa-question-circle"></i> Forgot password?</a></p>
+                    </div>
+                </div>
+
+                <!-- Auth Illustration -->
+                <div class="auth-illustration">
+                    <img src="{% static 'images/dashboard-bg.jpg' %}" alt="IoT Dashboard" class="auth-image">
+                    <div class="illustration-overlay">
+                        <h3>DHT11 Monitoring System</h3>
+                        <p>Real-time environmental data tracking and analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

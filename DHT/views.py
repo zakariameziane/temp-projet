@@ -1,22 +1,15 @@
 from django.shortcuts import render
-from .models import Dht11  # Assurez-vous d'importer le modèle Dht11
+from .models import Dht11
 from django.utils import timezone
 import csv
-from django.http import HttpResponse
-from django.utils import timezone
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from datetime import timedelta
 import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.contrib.auth import logout
 
-from django.contrib.auth.forms import UserCreationForm
 
 def home(request):
     return render(request, 'home.html')
@@ -30,7 +23,7 @@ def table(request):
     if difference_minutes > 60:
         temps_ecoule = 'il y ' + str(difference_minutes // 60) + 'h' + str(difference_minutes % 60) + 'min'
     valeurs = {'date': temps_ecoule, 'id': derniere_ligne.id, 'temp': derniere_ligne.temp, 'hum': derniere_ligne.hum}
-    return render(request, 'value.html', {'valeurs': valeurs})
+    return render(request, 'table.html', {'valeurs': valeurs})  # Changed from value.html to table.html
 
 def download_csv(request):
     model_values = Dht11.objects.all()
@@ -42,17 +35,16 @@ def download_csv(request):
     for row in liste:
         writer.writerow(row)
     return response
-#pour afficher navbar de template
+
 def index_view(request):
     return render(request, 'index.html')
 
-#pour afficher les graphes
 def graphiqueTemp(request):
-    return render(request, 'ChartTemp.html')
-# récupérer toutes les valeur de température et humidity sous forme un #fichier json
+    return render(request, 'charttemp.html')  # Changed from ChartTemp.html to charttemp.html
+
 def graphiqueHum(request):
-    return render(request, 'ChartHum.html')
-# récupérer toutes les valeur de température et humidity sous forme un #fichier json
+    return render(request, 'charthum.html')  # Changed from ChartHum.html to charthum.html
+
 def chart_data(request):
     dht = Dht11.objects.all()
 
@@ -62,18 +54,7 @@ def chart_data(request):
         'humidity': [Hum.hum for Hum in dht]
     }
     return JsonResponse(data)
-def chart_data(request):
-    dht = Dht11.objects.all()
 
-    data = {
-        'temps': [Dt.dt for Dt in dht],
-        'temperature': [Temp.temp for Temp in dht],
-        'humidity': [Hum.hum for Hum in dht]
-    }
-    return JsonResponse(data)
-
-#pour récupérer les valeurs de température et humidité de dernier 24h
-# et envoie sous forme JSON
 def chart_data_jour(request):
     dht = Dht11.objects.all()
     now = timezone.now()
@@ -129,8 +110,6 @@ def chart_data_mois(request):
     }
     return JsonResponse(data)
 
-
-
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -141,10 +120,10 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
 def sendtele():
     token = '6662023260:AAG4z48OO9gL8A6szdxg0SOma5hv9gIII1E'
     rece_id = 1242839034
     bot = telepot.Bot(token)
     bot.sendMessage(rece_id, 'la température depasse la normale')
     print(bot.sendMessage(rece_id, 'OK.'))
+

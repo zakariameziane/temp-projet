@@ -1,26 +1,393 @@
 {% extends 'base.html' %}
-{% block i %}
-<div class="projects">
-  <div class ="tables" >
-<table  border="0">
+{% load static %}
 
-    <thead class="DIV">
-        <tr>
-            <th>id</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for record in data %}
-        <tr>
-            <td>{{ record.id }}</td>
-            <td>{{ record.temp }}</td>
-            <td>{{ record.hum }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<style>
+    :root {
+        --primary-blue: #1976D2;
+        --dark-blue: #0D47A1;
+        --sky-blue: #64B5F6;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --dark-text: #2C3E50;
+        --success-green: #4CAF50;
+        --warning-orange: #FF9800;
+        --error-red: #F44336;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-lg: 0 10px 20px rgba(0,0,0,0.1);
+        --transition: all 0.3s ease;
+    }
+
+    .data-table-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .table-header-card {
+        background: var(--white);
+        border-radius: 10px 10px 0 0;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .table-header-card h2 {
+        color: var(--dark-text);
+        margin: 0;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .table-filters {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    #filter-form {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .filter-group label {
+        color: var(--dark-text);
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .filter-group select {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: var(--white);
+        color: var(--dark-text);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .filter-group select:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+    }
+
+    .btn {
+        padding: 0.5rem 1.25rem;
+        background: var(--primary-blue);
+        color: var(--white);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+        font-weight: 500;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+        background: var(--dark-blue);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        background: var(--white);
+        border-radius: 0 0 10px 10px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .sensor-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .sensor-table thead {
+        background: var(--primary-blue);
+        color: var(--white);
+    }
+
+    .sensor-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .table-heading {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .sensor-table tbody tr {
+        border-bottom: 1px solid #eee;
+        transition: var(--transition);
+    }
+
+    .sensor-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .sensor-table tbody tr:hover {
+        background: rgba(25, 118, 210, 0.05);
+    }
+
+    .sensor-table td {
+        padding: 1rem;
+        color: var(--dark-text);
+    }
+
+    .temp-value {
+        font-weight: 600;
+        color: var(--error-red);
+    }
+
+    .humidity-value {
+        font-weight: 600;
+        color: var(--primary-blue);
+    }
+
+    .table-footer {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--white);
+        border-radius: 6px;
+        box-shadow: var(--shadow-sm);
+        color: var(--dark-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Status indicators */
+    .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+
+    .status-normal {
+        background-color: var(--success-green);
+    }
+
+    .status-warning {
+        background-color: var(--warning-orange);
+    }
+
+    .status-critical {
+        background-color: var(--error-red);
+    }
+
+    /* Refresh animation */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .refreshing {
+        animation: spin 1s linear infinite;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .table-header-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .table-filters {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        #filter-form {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .filter-group select {
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="data-table-container">
+    <!-- Table Header with Filters -->
+    <div class="table-header-card">
+        <h2><i class="fas fa-table"></i> Sensor Data Dashboard</h2>
+
+        <div class="table-filters">
+            <form method="post" id="filter-form">
+                {% csrf_token %}
+                <div class="filter-group">
+                    <label for="mon_select"><i class="fas fa-filter"></i> Filter By:</label>
+                    {{ form }}
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-sync-alt"></i> Apply Filters
+                </button>
+            </form>
+
+            <button id="csv" class="btn">
+                <i class="fas fa-file-csv"></i> Export CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive">
+        <table class="sensor-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>
+                        <div class="table-heading">
+                            <i class="fas fa-thermometer-half"></i> Temperature
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-heading">
+                            <i class="fas fa-tint"></i> Humidity
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-heading">
+                            <i class="far fa-clock"></i> Timestamp
+                        </div>
+                    </th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ valeurs.id }}</td>
+                    <td class="temp-value">{{ valeurs.temp }} °C</td>
+                    <td class="humidity-value">{{ valeurs.hum }}%</td>
+                    <td>{{ valeurs.date }}</td>
+                    <td>
+                        {% if valeurs.temp > 30 or valeurs.hum > 70 %}
+                            <span class="status-indicator status-critical"></span> Critical
+                        {% elif valeurs.temp > 25 or valeurs.hum > 60 %}
+                            <span class="status-indicator status-warning"></span> Warning
+                        {% else %}
+                            <span class="status-indicator status-normal"></span> Normal
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Table Footer with Stats -->
+    <div class="table-footer">
+        <i class="fas fa-info-circle"></i>
+        <span id="last-updated">Last updated: {{ valeurs.date }}</span>
+        <span id="refresh-status" style="margin-left: auto;">
+            <i class="fas fa-sync-alt"></i> Auto-refresh in <span id="countdown">60</span>s
+        </span>
+    </div>
 </div>
-  </div>
-{% endblock i %}
+
+{% block scripts %}
+<script src="{% static 'js/table.js' %}"></script>
+<script>
+    // Auto-refresh countdown
+    let seconds = 60;
+    const countdownElement = document.getElementById('countdown');
+    const refreshIcon = document.querySelector('#refresh-status i');
+
+    const countdown = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
+
+        if (seconds <= 0) {
+            refreshIcon.classList.add('refreshing');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+    }, 1000);
+
+    // CSV Export functionality
+    document.getElementById('csv').addEventListener('click', function() {
+        // Convert table data to CSV
+        const rows = document.querySelectorAll('.sensor-table tr');
+        let csvContent = "data:text/csv;charset=utf-8,";
+
+        rows.forEach(row => {
+            const rowData = [];
+            row.querySelectorAll('th, td').forEach(cell => {
+                // Exclude the status indicator dot
+                if (!cell.classList.contains('status-indicator')) {
+                    rowData.push(cell.textContent.trim());
+                }
+            });
+            csvContent += rowData.join(",") + "\r\n";
+        });
+
+        // Create download link
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "sensor_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    // Highlight critical values
+    function checkCriticalValues() {
+        const temp = parseFloat("{{ valeurs.temp }}");
+        const humidity = parseFloat("{{ valeurs.hum }}");
+
+        if (temp > 30 || humidity > 70) {
+            document.querySelector('.temp-value').style.color = 'var(--error-red)';
+            document.querySelector('.humidity-value').style.color = 'var(--error-red)';
+        } else if (temp > 25 || humidity > 60) {
+            document.querySelector('.temp-value').style.color = 'var(--warning-orange)';
+            document.querySelector('.humidity-value').style.color = 'var(--warning-orange)';
+        }
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', checkCriticalValues);
+</script>
+{% endblock %}
+{% endblock %}

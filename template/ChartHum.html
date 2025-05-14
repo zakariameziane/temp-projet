@@ -1,95 +1,170 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block i %}
-<div class="graphique">
-    <div class="navb">
-        <button id="aujourdhui-link">Historique d'Aujourd'hui</button>
-        <button id="semaine-link">Historique de cette semaine</button>
-        <button id="mois-link">Historique de ce mois</button>
-        <!--button id="csv">Télecharger csv</button-->
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/charts.css' %}">
+
+<div class="chart-container">
+    <div class="chart-header">
+        <h2>
+            <i class="fas fa-tint"></i>
+            Humidity Readings
+        </h2>
+
+        <div class="time-period-selector">
+            <button class="time-period-btn active" data-period="day" data-url="{% url 'chart-data-jour' %}">
+                <i class="fas fa-calendar-day"></i> Today
+            </button>
+            <button class="time-period-btn" data-period="week" data-url="{% url 'chart-data-semaine' %}">
+                <i class="fas fa-calendar-week"></i> This Week
+            </button>
+            <button class="time-period-btn" data-period="month" data-url="{% url 'chart-data-mois' %}">
+                <i class="fas fa-calendar-alt"></i> This Month
+            </button>
+        </div>
     </div>
-    <div class="graphique-hum">
-        <canvas id="graphique-hum" height="220"></canvas>
+
+    <div class="chart-wrapper">
+        <canvas id="humidityChart"></canvas>
+    </div>
+
+    <div class="chart-stats">
+        <div class="stat-card">
+            <h3>Average</h3>
+            <p class="stat-value" id="avg-hum">-- %</p>
+        </div>
+        <div class="stat-card">
+            <h3>Maximum</h3>
+            <p class="stat-value" id="max-hum">-- %</p>
+        </div>
+        <div class="stat-card">
+            <h3>Minimum</h3>
+            <p class="stat-value" id="min-hum">-- %</p>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
 <script>
-    // Fonction pour créer un graphique avec des données spécifiques
-    function createChart(url, borderWidth) {
+    const ctx = document.getElementById('humidityChart').getContext('2d');
+    const humidityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Humidity (%)',
+                data: [],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                tension: 0.1,
+                fill: true,
+                pointRadius: 3,
+                pointHoverRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 0,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Humidity (%)'
+                    }
+                },
+                x: {
+                    type: 'time',
+                    time: {
+                        tooltipFormat: 'DD T',
+                        displayFormats: {
+                            hour: 'HH:mm',
+                            day: 'dd MMM',
+                            week: 'dd MMM',
+                            month: 'MMM yyyy'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    document.querySelectorAll('.time-period-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.time-period-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            fetchData(this.dataset.url);
+        });
+    });
+
+    fetchData("{% url 'chart-data-jour' %}");
+
+    function fetchData(url) {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                var labels = data.temps;
-                var dataValues = data.humidity;
-                var startIndex = labels.length - 27;
-                if (startIndex < 0) startIndex = 0;
-                labels = labels.slice(startIndex);
-                dataValues = dataValues.slice(startIndex);
-                var ctx = document.getElementById('graphique-hum').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'La valeur de Humidité',
-                            data: dataValues,
-                            backgroundColor: 'white',
-                            borderColor: 'rgb(0,0,255)',
-                            borderWidth: borderWidth,
-                            pointStyle: 'circles',
-                            pointRadius: 2,
-                            pointBorderColor: 'black'
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    min: 0,
-                                    max: 80, // Limiter l'axe des y à 80%
-                                    callback: function(value, index, values) {
-                                        return value + '%';
-                                    },
-                                }
-                            }],
-                            xAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    display: true,
-                                    autoSkip: true,
-                                    maxTicksLimit: 20,
-                                    callback: function(value, index, values) {
-                                        return value;
-                                    }
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
+                updateChart(data);
+                updateStats(data.humidity);
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    // Écouteurs d'événements pour les boutons
-    const aujourdhuiLink = document.getElementById('aujourdhui-link');
-    const semaineLink = document.getElementById('semaine-link');
-    const moisLink = document.getElementById('mois-link');
+    function updateChart(data) {
+        const chartData = data.temps.map((time, index) => ({
+            x: new Date(time).toISOString(),
+            y: data.humidity[index]
+        }));
 
-    aujourdhuiLink.addEventListener('click', () => {
-        createChart('/chart-data-jour/', 1);
-    });
+        humidityChart.data.labels = data.temps;
+        humidityChart.data.datasets[0].data = chartData;
 
-    semaineLink.addEventListener('click', () => {
-        createChart('/chart-data-semaine/', 2);
-    });
+        if (data.temps.length > 0) {
+            const start = new Date(data.temps[0]);
+            const end = new Date(data.temps[data.temps.length - 1]);
+            const range = end - start;
 
-    moisLink.addEventListener('click', () => {
-        createChart('/chart-data-mois/', 3);
-    });
+            let timeUnit = 'hour';
+            if (range > 7 * 24 * 60 * 60 * 1000) timeUnit = 'day';
+            if (range > 30 * 24 * 60 * 60 * 1000) timeUnit = 'month';
 
-    // Charge initiale du graphique avec /chart-data/
-    createChart('/chart-data/', 4);
+            humidityChart.options.scales.x.time.unit = timeUnit;
+        }
+
+        humidityChart.update();
+    }
+
+    function updateStats(humData) {
+        if (!humData || humData.length === 0) return;
+
+        const sum = humData.reduce((a, b) => a + b, 0);
+        const avg = sum / humData.length;
+        const max = Math.max(...humData);
+        const min = Math.min(...humData);
+
+        document.getElementById('avg-hum').textContent = `${avg.toFixed(1)} %`;
+        document.getElementById('max-hum').textContent = `${max.toFixed(1)} %`;
+        document.getElementById('min-hum').textContent = `${min.toFixed(1)} %`;
+    }
 </script>
-
 {% endblock %}

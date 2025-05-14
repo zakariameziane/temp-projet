@@ -1,32 +1,45 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-  <div class="navbar">
-    <nav >
-        <h2 class="logo">SURVEILLANCE IOT:CAPTEUR DHT11</h2>
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{% url 'index' %}" class="navbar-brand">
 
-            <ul>
-                    <li>  <a href="{% url 'table' %}" >Table</a></li>
-                    <li>  <a href="{% url 'myChartTemp' %}" >graph of temperature</a></li>
-                    <li>  <a href="{% url 'myChartHum' %}" >graph of humidity</a></li>
-                    <li>  <a href="{% url 'json' %}" >Json</a></li>
+            <span>DHT11 Monitor</span>
+        </a>
 
+        <ul class="navbar-nav">
+            <li>
+                <a href="{% url 'table' %}" class="nav-link {% if request.path == '/table/' %}active{% endif %}">
+                    <i class="fas fa-table"></i> Data Table
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'myChartTemp' %}" class="nav-link {% if request.path == '/chart-temp/' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> Temperature
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'myChartHum' %}" class="nav-link {% if request.path == '/chart-hum/' %}active{% endif %}">
+                    <i class="fas fa-tint"></i> Humidity
+                </a>
+            </li>
+        </ul>
 
-            </ul>
-            <form method="post" action="{% url 'table' %}">
-                {% csrf_token %}
+        <div class="navbar-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            {% endif %}
+        </div>
 
-                <select id="select" name="select_field">
-
-                  <option value="signup" selected>S'inscrire</option>
-                  <option value="logout">Se déconnecter</option>
-                </select>
-
-              </form>
-            <p>  </p>
-
-
-    </nav>
-</div>
-   <br>
-   <br>
-   <br>
-  <br>
+        <button class="navbar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>

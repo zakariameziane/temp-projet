@@ -1,9 +1,30 @@
- {% load static %}
-<link rel="stylesheet" href="{% static 'css/chart.css' %}">
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
- <link rel="stylesheet" href="{% static 'css/table.css' %}">
- {% include 'navBar.html' %}
+{% load static %}  <!-- ADD THIS LINE AT THE VERY TOP -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dashboard - DHT11 Monitoring</title>
 
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-{% block i %}
-{% endblock %}
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/logo.svg' %}">
+</head>
+<body>
+    {% include 'navBar.html' %}
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
