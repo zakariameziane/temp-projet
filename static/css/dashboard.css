@@ -271,6 +271,7 @@
 .temp-value {
     color: var(--error-red);
     font-weight: 500;
+
 }
 
 .humidity-value {

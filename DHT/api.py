@@ -36,7 +36,7 @@ def Dlist(request):
                 derniere_temperature = Dht11.objects.last().temp
                 print(derniere_temperature)
 
-                if derniere_temperature > 25:
+                if derniere_temperature > 15:
                     # Alert Email
                     subject = 'Alerte'
                     message = 'La température dépasse le seuil de 25°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation'
@@ -45,14 +45,14 @@ def Dlist(request):
                     send_mail(subject, message, email_from, recipient_list)
 
                     # Alert WhatsApp
-                    #account_sid = 'ACf77afb527416756f5d618382c3f58938'
-                   # auth_token = '3ebef5aa090abb83c231fbbfe27ab6c7 '
-                    #client = Client(account_sid, auth_token)
-                   # message_whatsapp = client.messages.create(
-                     #   from_='whatsapp:+14155238886,
-                       # body='La température dépasse le seuil de 25°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation',
-                       # to='whatsapp:+212687656704'p
-                    #)
+                    account_sid = 'ACf77afb527416756f5d618382c3f58938'
+                    auth_token = '3ebef5aa090abb83c231fbbfe27ab6c7 '
+                    client = Client(account_sid, auth_token)
+                    message_whatsapp = client.messages.create(
+                        from_='whatsapp:+14155238886',
+                        body='La température dépasse le seuil de 25°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation',
+                        to='whatsapp:+212687656704'
+                    )
 
                     # Alert Telegram
                     telegram_token = '#votre token '
