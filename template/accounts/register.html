@@ -1,0 +1,300 @@
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - IoT Dashboard</title>
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1976D2;
+            --dark-blue: #0D47A1;
+            --sky-blue: #64B5F6;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --light-bg: #F5F9FF;
+            --dark-text: #2C3E50;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url("{% static 'images/bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 71, 161, 0.7);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .header-banner p {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .header-banner .highlight {
+            font-weight: 600;
+            color: #FFD700;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, var(--white), var(--sky-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .register-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto 3rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: var(--shadow);
+            animation: slideUp 0.8s ease-in-out;
+        }
+
+        .register-header {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .register-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+        }
+
+        .register-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .register-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .register-form input:focus {
+            outline: none;
+            border-color: var(--sky-blue);
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.3);
+        }
+
+        .register-form input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .register-form .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+        }
+
+        .register-form .btn:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .register-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+        }
+
+        .register-footer a {
+            color: var(--sky-blue);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ffcccc;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .register-box {
+                padding: 1.5rem;
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <p>Système de surveillance en temps réel utilisant <span class="highlight">DHT11</span> et <span class="highlight">ESP8266</span></p>
+        </div>
+
+        <div class="hero">
+            <h1>Create Account</h1>
+            <p>Register to access the IoT environmental monitoring dashboard</p>
+        </div>
+
+        <div class="register-box">
+            <div class="register-header">
+                <h2><i class="fas fa-user-plus"></i> Register</h2>
+                <p>Create your account to get started</p>
+            </div>
+
+            <form method="post" class="register-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                    {% if register_form.username.errors %}
+                        <span class="error-message">{{ register_form.username.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                    {% if register_form.email.errors %}
+                        <span class="error-message">{{ register_form.email.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password1" placeholder="Password" required>
+                    {% if register_form.password1.errors %}
+                        <span class="error-message">{{ register_form.password1.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password2" placeholder="Confirm Password" required>
+                    {% if register_form.password2.errors %}
+                        <span class="error-message">{{ register_form.password2.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </form>
+
+            <div class="register-footer">
+                <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

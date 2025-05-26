@@ -36,7 +36,7 @@ def Dlist(request):
                 derniere_temperature = Dht11.objects.last().temp
                 print(derniere_temperature)
 
-                if derniere_temperature > 15:
+                if derniere_temperature > 25:
                     # Alert Email
                     subject = 'Alerte'
                     message = 'La température dépasse le seuil de 25°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation'

@@ -1,18 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Dht11
 from django.utils import timezone
 import csv
 from django.http import HttpResponse, JsonResponse
 from datetime import timedelta
 import datetime
-from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import RegisterForm
 
 
+# Temperature-related views (unchanged)
 def home(request):
-    return render(request, 'home.html')
+    # Handle login form submission
+    if request.method == 'POST' and 'username' in request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, f"Welcome back, {username}!")
+            return redirect('index')
+        else:
+            messages.error(request, "Invalid username or password.")
+
+    # Your existing home page context
+    context = {
+        'user': request.user  # Pass user object to template
+    }
+    return render(request, 'home.html', context)
 
 def table(request):
     derniere_ligne = Dht11.objects.last()
@@ -23,8 +41,9 @@ def table(request):
     if difference_minutes > 60:
         temps_ecoule = 'il y ' + str(difference_minutes // 60) + 'h' + str(difference_minutes % 60) + 'min'
     valeurs = {'date': temps_ecoule, 'id': derniere_ligne.id, 'temp': derniere_ligne.temp, 'hum': derniere_ligne.hum}
-    return render(request, 'table.html', {'valeurs': valeurs})  # Changed from value.html to table.html
+    return render(request, 'table.html', {'valeurs': valeurs})
 
+@login_required
 def download_csv(request):
     model_values = Dht11.objects.all()
     response = HttpResponse(content_type='text/csv')
@@ -40,14 +59,13 @@ def index_view(request):
     return render(request, 'index.html')
 
 def graphiqueTemp(request):
-    return render(request, 'charttemp.html')  # Changed from ChartTemp.html to charttemp.html
+    return render(request, 'charttemp.html')
 
 def graphiqueHum(request):
-    return render(request, 'charthum.html')  # Changed from ChartHum.html to charthum.html
+    return render(request, 'charthum.html')
 
 def chart_data(request):
     dht = Dht11.objects.all()
-
     data = {
         'temps': [Dt.dt for Dt in dht],
         'temperature': [Temp.temp for Temp in dht],
@@ -58,11 +76,7 @@ def chart_data(request):
 def chart_data_jour(request):
     dht = Dht11.objects.all()
     now = timezone.now()
-
-    # Récupérer l'heure il y a 24 heures
     last_24_hours = now - timezone.timedelta(hours=24)
-
-    # Récupérer tous les objets de Module créés au cours des 24 dernières heures
     dht = Dht11.objects.filter(dt__range=(last_24_hours, now))
     data = {
         'temps': [Dt.dt for Dt in dht],
@@ -71,54 +85,27 @@ def chart_data_jour(request):
     }
     return JsonResponse(data)
 
-#pour récupérer les valeurs de température et humidité de dernier semaine
-# et envoie sous forme JSON
 def chart_data_semaine(request):
     dht = Dht11.objects.all()
-    # calcul de la date de début de la semaine dernière
     date_debut_semaine = timezone.now().date() - datetime.timedelta(days=7)
-    print(datetime.timedelta(days=7))
-    print(date_debut_semaine)
-
-    # filtrer les enregistrements créés depuis le début de la semaine dernière
     dht = Dht11.objects.filter(dt__gte=date_debut_semaine)
-
     data = {
         'temps': [Dt.dt for Dt in dht],
         'temperature': [Temp.temp for Temp in dht],
         'humidity': [Hum.hum for Hum in dht]
     }
-
     return JsonResponse(data)
 
-#pour récupérer les valeurs de température et humidité de dernier moins
-# et envoie sous forme JSON
 def chart_data_mois(request):
     dht = Dht11.objects.all()
-
     date_debut_semaine = timezone.now().date() - datetime.timedelta(days=30)
-    print(datetime.timedelta(days=30))
-    print(date_debut_semaine)
-
-    # filtrer les enregistrements créés depuis le début de la semaine dernière
     dht = Dht11.objects.filter(dt__gte=date_debut_semaine)
-
     data = {
         'temps': [Dt.dt for Dt in dht],
         'temperature': [Temp.temp for Temp in dht],
         'humidity': [Hum.hum for Hum in dht]
     }
     return JsonResponse(data)
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
 
 def sendtele():
     token = '6662023260:AAG4z48OO9gL8A6szdxg0SOma5hv9gIII1E'
@@ -127,3 +114,38 @@ def sendtele():
     bot.sendMessage(rece_id, 'la température depasse la normale')
     print(bot.sendMessage(rece_id, 'OK.'))
 
+# Authentication views (simplified and organized)
+def register_request(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("index")  # Changed from 'home' to 'index'
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = RegisterForm()
+    return render(request=request, template_name="accounts/register.html", context={"register_form":form})
+
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("index")  # Changed from 'home' to 'index'
+            else:
+                messages.error(request,"Invalid username or password.")
+        else:
+            messages.error(request,"Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="accounts/login.html", context={"login_form":form})
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return redirect("index")  # Changed from 'home' to 'index'

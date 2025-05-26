@@ -138,3 +138,8 @@ EMAIL_USE_TLS = True # ou False, selon la configuration de votrefournisseur de m
 EMAIL_HOST_USER = 'zakariameziane66@gmail.com' # remplacer avec votre adresse email
 EMAIL_HOST_PASSWORD = 'ioxg ibnm hkru btqg'
 
+
+
+LOGIN_REDIRECT_URL = 'index'  # Where users go after login
+LOGOUT_REDIRECT_URL = 'index'  # Where users go after logout
+

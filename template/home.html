@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Dashboard - Home</title>
+    <title>Tableau de Bord IoT - Surveillance Environnementale</title>
 
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -65,6 +65,28 @@
             align-items: center;
         }
 
+        /* Header Banner */
+        .header-banner {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .header-banner p {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .header-banner .highlight {
+            font-weight: 600;
+            color: #FFD700;
+        }
+
         .hero {
             text-align: center;
             margin-bottom: 2rem;
@@ -117,9 +139,63 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--white);
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .cta-button i {
             margin-right: 8px;
             font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            max-width: 1000px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 300px;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--sky-blue);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
         }
 
         .auth-container {
@@ -277,8 +353,97 @@
             font-size: 0.9rem;
         }
 
+        .alert.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
         .alert i {
             margin-right: 8px;
+        }
+
+        /* Footer Section */
+        .footer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-link:hover {
+            color: var(--sky-blue);
+        }
+
+        .footer-link i {
+            margin-right: 8px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Tech Specs Section */
+        .tech-specs {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        .tech-specs h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--white);
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .spec-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .spec-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--sky-blue);
+        }
+
+        .spec-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
         }
 
         /* Animations */
@@ -314,74 +479,140 @@
             .auth-illustration {
                 display: none;
             }
+
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="hero">
-            <h1>IoT Monitoring Dashboard</h1>
-            <p>Track real-time temperature and humidity data with beautiful visualizations and comprehensive analytics for your environment.</p>
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <p>Système de surveillance en temps réel utilisant <span class="highlight">DHT11</span> et <span class="highlight">ESP8266</span> - Précision et fiabilité pour votre environnement</p>
+        </div>
 
+        <div class="hero">
+            {% if not user.is_authenticated %}
+<div class="login-box" style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; max-width: 400px; margin: 20px auto;">
+    <h3 style="color: white; text-align: center;"><i class="fas fa-sign-in-alt"></i> Login</h3>
+
+    {% if messages %}
+    <div class="alert" style="color: #ffcccc; margin-bottom: 15px;">
+        {% for message in messages %}
+        <i class="fas fa-exclamation-circle"></i> {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <input type="text" name="username" placeholder="Username" required
+                   style="width: 100%; padding: 10px; border-radius: 5px; border: none;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <input type="password" name="password" placeholder="Password" required
+                   style="width: 100%; padding: 10px; border-radius: 5px; border: none;">
+        </div>
+        <button type="submit"
+                style="width: 100%; padding: 10px; background: var(--primary-blue); color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+    </form>
+    <p style="text-align: center; margin-top: 15px; color: white;">
+        No account? <a href="{% url 'register' %}" style="color: var(--sky-blue);">Register</a>
+    </p>
+</div>
+{% else %}
+<div style="text-align: center; margin: 20px 0;">
+    <p style="color: white;">Welcome, {{ user.username }}!</p>
+    <a href="{% url 'logout' %}" class="cta-button secondary" style="display: inline-block;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
+{% endif %}
             <div class="cta-buttons">
                 <a href="{% url 'table' %}" class="cta-button">
-                    <i class="fas fa-chart-line"></i> View Dashboard
+                    <i class="fas fa-chart-line"></i> Voir le Tableau de Bord
                 </a>
-                <a href="#login" class="cta-button">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
+                <a href="#features" class="cta-button secondary">
+                    <i class="fas fa-info-circle"></i> En Savoir Plus
                 </a>
             </div>
         </div>
-
-        <div class="auth-container" id="login">
-            <div class="auth-card">
-                <!-- Login Form -->
-                <div class="auth-form">
-                    <div class="auth-header">
-                        <img src="{% static 'images/logo.svg' %}" alt="Logo" class="auth-logo">
-                        <h2>Welcome Back</h2>
-                        <p>Sign in to access your IoT dashboard</p>
-                    </div>
-
-                    {% if form.errors %}
-                    <div class="alert">
-                        <i class="fas fa-exclamation-circle"></i> Invalid username or password.
-                    </div>
-                    {% endif %}
-
-                    <form method="post">
-                        {% csrf_token %}
-
-                        <div class="form-group">
-                            <label for="username"><i class="fas fa-user"></i> Username</label>
-                            <input type="text" id="username" name="username" required placeholder="Enter your username">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password"><i class="fas fa-lock"></i> Password</label>
-                            <input type="password" id="password" name="password" required placeholder="Enter your password">
-                        </div>
-
-                        <button type="submit" class="btn">
-                            <i class="fas fa-sign-in-alt"></i> Sign In
-                        </button>
-                    </form>
-
-                    <div class="auth-footer">
-                        <p>Don't have an account? <a href="#">Contact administrator</a></p>
-                        <p><a href="#"><i class="fas fa-question-circle"></i> Forgot password?</a></p>
-                    </div>
+        <!-- Features Section -->
+        <div class="features" id="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-thermometer-half"></i>
                 </div>
+                <h3 class="feature-title">Surveillance de Température</h3>
+                <p class="feature-desc">Capteur DHT11 précis pour mesurer la température ambiante avec une précision de ±2°C et une plage de 0°C à 50°C.</p>
+            </div>
 
-                <!-- Auth Illustration -->
-                <div class="auth-illustration">
-                    <img src="{% static 'images/dashboard-bg.jpg' %}" alt="IoT Dashboard" class="auth-image">
-                    <div class="illustration-overlay">
-                        <h3>DHT11 Monitoring System</h3>
-                        <p>Real-time environmental data tracking and analysis</p>
-                    </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <h3 class="feature-title">Surveillance d'Humidité</h3>
+                <p class="feature-desc">Mesure de l'humidité relative avec une précision de ±5% RH et une plage de 20% à 80% RH.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <h3 class="feature-title">Connectivité ESP8266</h3>
+                <p class="feature-desc">Module Wi-Fi économique et efficace pour transmettre vos données en temps réel vers le cloud.</p>
+            </div>
+        </div>
+
+        <!-- Tech Specs Section -->
+        <div class="tech-specs">
+            <h2><i class="fas fa-microchip"></i> Avantages Techniques</h2>
+            <div class="spec-grid">
+                <div class="spec-item">
+                    <h3 class="spec-title">DHT11 - Capteur Fiable</h3>
+                    <p class="spec-desc">Le capteur DHT11 offre une solution économique pour la surveillance environnementale avec une excellente stabilité à long terme.</p>
+                </div>
+                <div class="spec-item">
+                    <h3 class="spec-title">ESP8266 - Puissance IoT</h3>
+                    <p class="spec-desc">L'ESP8266 combine processeur, Wi-Fi et mémoire flash, idéal pour les projets IoT avec faible consommation d'énergie.</p>
+                </div>
+                <div class="spec-item">
+                    <h3 class="spec-title">Applications</h3>
+                    <p class="spec-desc">Idéal pour les serres, les entrepôts, les bureaux et les environnements domestiques nécessitant un contrôle climatique.</p>
+                </div>
+                <div class="spec-item">
+                    <h3 class="spec-title">Bénéfices</h3>
+                    <p class="spec-desc">Prévention des dommages matériels, optimisation énergétique, conformité aux normes de stockage et amélioration du confort.</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" id="support">
+            <div class="footer-links">
+                <a href="#features" class="footer-link">
+                    <i class="fas fa-info-circle"></i> Fonctionnalités
+                </a>
+                <a href="#signup" class="footer-link">
+                    <i class="fas fa-user-plus"></i> Inscription
+                </a>
+                <a href="mailto:support@iotdashboard.com" class="footer-link">
+                    <i class="fas fa-envelope"></i> Support
+                </a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-file-alt"></i> Documentation
+                </a>
+            </div>
+            <p class="footer-text">
+                © 2023 Tableau de Bord IoT - Surveillance Environnementale. Tous droits réservés.<br>
+                Système développé avec DHT11 et ESP8266 pour une surveillance précise et fiable.
+            </p>
         </div>
     </div>
 </body>

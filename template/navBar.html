@@ -1,27 +1,250 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+<style>
+    /* Navbar Styles */
+    .navbar {
+        background: rgba(25, 118, 210, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .navbar:hover {
+        background: rgba(25, 118, 210, 0.95);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0.8rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand span {
+        margin-left: 10px;
+        background: linear-gradient(to right, #ffffff, #64B5F6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+    }
+
+    .navbar-brand span::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(to right, #64B5F6, #ffffff);
+        transition: width 0.3s ease;
+    }
+
+    .navbar-brand:hover span::after {
+        width: 100%;
+    }
+
+    .navbar-nav {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar-nav li {
+        position: relative;
+        margin: 0 0.5rem;
+    }
+
+    .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-link i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background: white;
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link:hover::before {
+        width: 60%;
+    }
+
+    .nav-link.active {
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-link.active::before {
+        width: 60%;
+        background: #64B5F6;
+    }
+
+    .navbar-actions .btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .navbar-actions .btn i {
+        margin-right: 8px;
+    }
+
+    .btn {
+        background: white;
+        color: #1976D2;
+        border: none;
+    }
+
+    .btn:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .navbar-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .navbar-container {
+            padding: 0.8rem 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .navbar-nav {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            margin-top: 1rem;
+        }
+
+        .navbar-nav.show {
+            display: flex;
+        }
+
+        .navbar-nav li {
+            margin: 0.3rem 0;
+        }
+
+        .navbar-actions {
+            display: none;
+            width: 100%;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .navbar-actions.show {
+            display: block;
+        }
+
+        .navbar-toggle {
+            display: block;
+        }
+    }
+
+    /* Animation for navbar on scroll */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .navbar.scrolled {
+        animation: fadeInDown 0.5s ease forwards;
+    }
+</style>
 
 <nav class="navbar">
     <div class="navbar-container">
         <a href="{% url 'index' %}" class="navbar-brand">
-
-            <span>DHT11 Monitor</span>
+            <i class="fas fa-thermometer-half"></i>
+            <span>Surveillance DHT11</span>
         </a>
 
         <ul class="navbar-nav">
             <li>
                 <a href="{% url 'table' %}" class="nav-link {% if request.path == '/table/' %}active{% endif %}">
-                    <i class="fas fa-table"></i> Data Table
+                    <i class="fas fa-table"></i> Tableau de Données
                 </a>
             </li>
             <li>
                 <a href="{% url 'myChartTemp' %}" class="nav-link {% if request.path == '/chart-temp/' %}active{% endif %}">
-                    <i class="fas fa-chart-line"></i> Temperature
+                    <i class="fas fa-chart-line"></i> Température
                 </a>
             </li>
             <li>
                 <a href="{% url 'myChartHum' %}" class="nav-link {% if request.path == '/chart-hum/' %}active{% endif %}">
-                    <i class="fas fa-tint"></i> Humidity
+                    <i class="fas fa-tint"></i> Humidité
                 </a>
             </li>
         </ul>
@@ -29,17 +252,46 @@
         <div class="navbar-actions">
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="btn btn-outline">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
             {% else %}
                 <a href="{% url 'login' %}" class="btn">
-                    <i class="fas fa-sign-in-alt"></i> Login
+                    <i class="fas fa-sign-in-alt"></i> Connexion
                 </a>
             {% endif %}
         </div>
 
-        <button class="navbar-toggle">
+        <button class="navbar-toggle" onclick="toggleNavbar()">
             <i class="fas fa-bars"></i>
         </button>
     </div>
 </nav>
+
+<script>
+    // Toggle mobile menu
+    function toggleNavbar() {
+        const nav = document.querySelector('.navbar-nav');
+        const actions = document.querySelector('.navbar-actions');
+        nav.classList.toggle('show');
+        actions.classList.toggle('show');
+    }
+
+    // Add scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleNavbar();
+            }
+        });
+    });
+</script>

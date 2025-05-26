@@ -2,47 +2,431 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/charts.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary-blue: #1976D2;
+        --dark-blue: #0D47A1;
+        --sky-blue: #64B5F6;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --light-bg: #F5F9FF;
+        --dark-text: #2C3E50;
+        --success-green: #4CAF50;
+        --warning-orange: #FF9800;
+        --error-red: #F44336;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+        --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
+        --shadow-lg: 0 10px 25px rgba(0,0,0,0.2);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        background-image: url("{% static 'images/bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        position: relative;
+        color: var(--white);
+    }
+
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 71, 161, 0.7);
+        z-index: -1;
+    }
+
+    .chart-container {
+        max-width: 1200px;
+        margin: 3rem auto 2rem;
+        padding: 0 1.5rem;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+        color: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        transform: rotate(30deg);
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .dashboard-header p {
+        opacity: 0.9;
+        max-width: 700px;
+    }
+
+    .chart-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .chart-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .time-period-selector {
+        display: flex;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.3rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .time-period-btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .time-period-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+
+    .time-period-btn.active {
+        background: var(--primary-blue);
+        color: var(--white);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .chart-wrapper {
+        background: rgba(255, 255, 255);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        height: 500px;
+        position: relative;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .chart-wrapper canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .chart-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        border-left: 4px solid var(--primary-blue);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--white);
+        text-align: center;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--sky-blue);
+    }
+
+    /* Additional Info Section */
+    .info-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .info-header {
+        background: rgba(25, 118, 210, 0.8);
+        color: white;
+        padding: 1.2rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .info-content {
+        padding: 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .info-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 3px solid var(--sky-blue);
+    }
+
+    .info-item h4 {
+        margin: 0 0 0.5rem 0;
+        color: var(--sky-blue);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-item p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Footer Section */
+    .footer {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        margin-top: 3rem;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .footer-link {
+        color: var(--white);
+        text-decoration: none;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .footer-link:hover {
+        color: var(--sky-blue);
+    }
+
+    .footer-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .chart-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .time-period-selector {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .chart-wrapper {
+            height: 400px;
+            padding: 1rem;
+        }
+
+        .chart-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-links {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chart-container {
+            margin-top: 5rem;
+        }
+    }
+</style>
 
 <div class="chart-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1><i class="fas fa-tint"></i> Analyse des Tendances d'Humidité</h1>
+        <p>Visualisation avancée des données d'humidité avec analyse statistique en temps réel pour optimiser votre environnement</p>
+    </div>
+
+    <!-- Chart Header -->
     <div class="chart-header">
         <h2>
             <i class="fas fa-tint"></i>
-            Humidity Readings
+            Relevés d'Humidité
         </h2>
 
         <div class="time-period-selector">
             <button class="time-period-btn active" data-period="day" data-url="{% url 'chart-data-jour' %}">
-                <i class="fas fa-calendar-day"></i> Today
+                <i class="fas fa-calendar-day"></i> Aujourd'hui
             </button>
             <button class="time-period-btn" data-period="week" data-url="{% url 'chart-data-semaine' %}">
-                <i class="fas fa-calendar-week"></i> This Week
+                <i class="fas fa-calendar-week"></i> Cette Semaine
             </button>
             <button class="time-period-btn" data-period="month" data-url="{% url 'chart-data-mois' %}">
-                <i class="fas fa-calendar-alt"></i> This Month
+                <i class="fas fa-calendar-alt"></i> Ce Mois
             </button>
         </div>
     </div>
 
+    <!-- Chart Wrapper -->
     <div class="chart-wrapper">
         <canvas id="humidityChart"></canvas>
     </div>
 
+    <!-- Statistics Cards -->
     <div class="chart-stats">
         <div class="stat-card">
-            <h3>Average</h3>
+            <h3><i class="fas fa-calculator"></i> Moyenne</h3>
             <p class="stat-value" id="avg-hum">-- %</p>
         </div>
         <div class="stat-card">
-            <h3>Maximum</h3>
+            <h3><i class="fas fa-arrow-up"></i> Maximum</h3>
             <p class="stat-value" id="max-hum">-- %</p>
         </div>
         <div class="stat-card">
-            <h3>Minimum</h3>
+            <h3><i class="fas fa-arrow-down"></i> Minimum</h3>
             <p class="stat-value" id="min-hum">-- %</p>
         </div>
+          <div class="stat-card">
+            <h3><i class="fas fa-history"></i> Dernière Mise à Jour</h3>
+            <p class="stat-value" id="last-update">--:--</p>
+        </div>
     </div>
-</div>
+  <!-- Footer -->
+        <div class="footer" id="support">
+            <div class="footer-links">
+                <a href="#features" class="footer-link">
+                    <i class="fas fa-info-circle"></i> Fonctionnalités
+                </a>
+                <a href="#login" class="footer-link">
+                    <i class="fas fa-sign-in-alt"></i> Connexion
+                </a>
+                <a href="mailto:support@iotdashboard.com" class="footer-link">
+                    <i class="fas fa-envelope"></i> Support
+                </a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-file-alt"></i> Documentation
+                </a>
+            </div>
+            <p class="footer-text">
+                © 2023 Tableau de Bord IoT - Surveillance Environnementale. Tous droits réservés.<br>
+                Système développé avec DHT11 et ESP8266 pour une surveillance précise et fiable.
+            </p>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -51,26 +435,40 @@
 <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
 <script>
+    // Initialize chart with Luxon adapter for better date handling
     const ctx = document.getElementById('humidityChart').getContext('2d');
     const humidityChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: [],
             datasets: [{
-                label: 'Humidity (%)',
+                label: 'Humidité (%)',
                 data: [],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
+                backgroundColor: 'rgba(100, 181, 246, 0.2)',
+                borderColor: 'rgba(100, 181, 246, 1)',
+                borderWidth: 3,
                 tension: 0.1,
                 fill: true,
-                pointRadius: 3,
-                pointHoverRadius: 5
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: 'rgba(100, 181, 246, 1)',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            backgroundColor: '#ffffff',
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+                        }
+                    }
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: false,
@@ -78,7 +476,18 @@
                     max: 100,
                     title: {
                         display: true,
-                        text: 'Humidity (%)'
+                        text: 'Humidité (%)',
+                        color: '#2C3E50',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    ticks: {
+                        color: '#2C3E50'
                     }
                 },
                 x: {
@@ -94,22 +503,77 @@
                     },
                     title: {
                         display: true,
-                        text: 'Time'
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+                        text: 'Temps',
+                        color: '#2C3E50',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
                         }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    ticks: {
+                        color: '#2C3E50'
                     }
                 }
             }
-        }
+        },
+        plugins: [{
+            id: 'warningLine',
+            beforeDraw: function(chart) {
+                const ctx = chart.ctx;
+                const chartArea = chart.chartArea;
+                const yScale = chart.scales.y;
+
+                // Draw warning line at 60%
+                const warningHum = 60;
+                const yPosition = yScale.getPixelForValue(warningHum);
+
+                if (yPosition >= chartArea.top && yPosition <= chartArea.bottom) {
+                    ctx.save();
+                    ctx.strokeStyle = '#FF9800';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([10, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(chartArea.left, yPosition);
+                    ctx.lineTo(chartArea.right, yPosition);
+                    ctx.stroke();
+
+                    // Add warning label
+                    ctx.fillStyle = '#FF9800';
+                    ctx.font = 'bold 12px Poppins';
+                    ctx.textAlign = 'right';
+                    ctx.fillText('Seuil d\'avertissement (60%)', chartArea.right - 10, yPosition - 8);
+                    ctx.restore();
+                }
+
+                // Draw critical line at 70%
+                const criticalHum = 70;
+                const yPositionCritical = yScale.getPixelForValue(criticalHum);
+
+                if (yPositionCritical >= chartArea.top && yPositionCritical <= chartArea.bottom) {
+                    ctx.save();
+                    ctx.strokeStyle = '#F44336';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([10, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(chartArea.left, yPositionCritical);
+                    ctx.lineTo(chartArea.right, yPositionCritical);
+                    ctx.stroke();
+
+                    // Add critical label
+                    ctx.fillStyle = '#F44336';
+                    ctx.font = 'bold 12px Poppins';
+                    ctx.textAlign = 'right';
+                    ctx.fillText('Seuil critique (70%)', chartArea.right - 10, yPositionCritical - 8);
+                    ctx.restore();
+                }
+            }
+        }]
     });
 
+    // Set up time period buttons
     document.querySelectorAll('.time-period-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.time-period-btn').forEach(b => b.classList.remove('active'));
@@ -118,6 +582,7 @@
         });
     });
 
+    // Load initial data (today)
     fetchData("{% url 'chart-data-jour' %}");
 
     function fetchData(url) {
@@ -131,6 +596,7 @@
     }
 
     function updateChart(data) {
+        // Format data for Chart.js
         const chartData = data.temps.map((time, index) => ({
             x: new Date(time).toISOString(),
             y: data.humidity[index]
@@ -139,6 +605,7 @@
         humidityChart.data.labels = data.temps;
         humidityChart.data.datasets[0].data = chartData;
 
+        // Adjust time unit based on data range
         if (data.temps.length > 0) {
             const start = new Date(data.temps[0]);
             const end = new Date(data.temps[data.temps.length - 1]);
