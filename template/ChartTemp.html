@@ -150,6 +150,71 @@
         box-shadow: var(--shadow-sm);
     }
 
+    /* Warning Threshold Control */
+    .threshold-control {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .threshold-label {
+        color: var(--white);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .threshold-input {
+        padding: 0.6rem 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        font-size: 1rem;
+        width: 100px;
+        transition: var(--transition);
+    }
+
+    .threshold-input:focus {
+        outline: none;
+        border-color: var(--sky-blue);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+    }
+
+    .threshold-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .threshold-apply-btn {
+        padding: 0.6rem 1.2rem;
+        background: linear-gradient(135deg, var(--success-green), #45a049);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .threshold-apply-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
     .chart-wrapper {
         background: rgba(255, 255, 255, 1);
         backdrop-filter: blur(10px);
@@ -330,6 +395,16 @@
             justify-content: center;
         }
 
+        .threshold-control {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .threshold-input {
+            width: 100%;
+            max-width: 200px;
+        }
+
         .chart-wrapper {
             height: 400px;
             padding: 1rem;
@@ -379,6 +454,19 @@
                 <i class="fas fa-calendar-alt"></i> Ce Mois
             </button>
         </div>
+    </div>
+
+    <!-- Warning Threshold Control -->
+    <div class="threshold-control">
+        <label class="threshold-label">
+            <i class="fas fa-exclamation-triangle" style="color: var(--warning-orange);"></i>
+            Seuil d'Avertissement (°C):
+        </label>
+        <input type="number" id="warningThreshold" class="threshold-input" value="25" min="0" max="50" step="0.1">
+        <button class="threshold-apply-btn" onclick="updateWarningThreshold()">
+            <i class="fas fa-check"></i>
+            Appliquer
+        </button>
     </div>
 
     <!-- Chart Wrapper -->
@@ -436,6 +524,9 @@
 <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
 <script>
+    // Global variable for warning threshold
+    let warningThreshold = 25;
+
     // Initialize chart with Luxon adapter for better date handling
     const ctx = document.getElementById('temperatureChart').getContext('2d');
     const temperatureChart = new Chart(ctx, {
@@ -542,9 +633,8 @@
                 const chartArea = chart.chartArea;
                 const yScale = chart.scales.y;
 
-                // Draw warning line at 25°C
-                const warningTemp = 25;
-                const yPosition = yScale.getPixelForValue(warningTemp);
+                // Draw only warning line with custom threshold - critical line removed
+                const yPosition = yScale.getPixelForValue(warningThreshold);
 
                 if (yPosition >= chartArea.top && yPosition <= chartArea.bottom) {
                     ctx.save();
@@ -556,38 +646,40 @@
                     ctx.lineTo(chartArea.right, yPosition);
                     ctx.stroke();
 
-                    // Add warning label
+                    // Add warning label with custom value
                     ctx.fillStyle = '#FF9800';
                     ctx.font = 'bold 12px Poppins';
                     ctx.textAlign = 'right';
-                    ctx.fillText('Seuil d\'avertissement (25°C)', chartArea.right - 10, yPosition - 8);
-                    ctx.restore();
-                }
-
-                // Draw critical line at 30°C
-                const criticalTemp = 30;
-                const yPositionCritical = yScale.getPixelForValue(criticalTemp);
-
-                if (yPositionCritical >= chartArea.top && yPositionCritical <= chartArea.bottom) {
-                    ctx.save();
-                    ctx.strokeStyle = '#F44336';
-                    ctx.lineWidth = 2;
-                    ctx.setLineDash([10, 5]);
-                    ctx.beginPath();
-                    ctx.moveTo(chartArea.left, yPositionCritical);
-                    ctx.lineTo(chartArea.right, yPositionCritical);
-                    ctx.stroke();
-
-                    // Add critical label
-                    ctx.fillStyle = '#F44336';
-                    ctx.font = 'bold 12px Poppins';
-                    ctx.textAlign = 'right';
-                    ctx.fillText('Seuil critique (30°C)', chartArea.right - 10, yPositionCritical - 8);
+                    ctx.fillText(`Seuil d'avertissement (${warningThreshold}°C)`, chartArea.right - 10, yPosition - 8);
                     ctx.restore();
                 }
             }
         }]
     });
+
+    // Function to update warning threshold
+    function updateWarningThreshold() {
+        const newThreshold = parseFloat(document.getElementById('warningThreshold').value);
+
+        if (isNaN(newThreshold) || newThreshold < 0 || newThreshold > 50) {
+            alert('Veuillez entrer une valeur valide entre 0 et 50°C.');
+            return;
+        }
+
+        warningThreshold = newThreshold;
+        temperatureChart.update();
+
+        // Visual feedback
+        const btn = document.querySelector('.threshold-apply-btn');
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Appliqué !';
+        btn.style.background = '#4CAF50';
+
+        setTimeout(() => {
+            btn.innerHTML = originalContent;
+            btn.style.background = 'linear-gradient(135deg, var(--success-green), #45a049)';
+        }, 2000);
+    }
 
     // Set up time period buttons
     document.querySelectorAll('.time-period-btn').forEach(btn => {
@@ -655,6 +747,13 @@
                 `${updateTime.getHours().toString().padStart(2, '0')}:${updateTime.getMinutes().toString().padStart(2, '0')}`;
         }
     }
+
+    // Allow Enter key to apply threshold
+    document.getElementById('warningThreshold').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            updateWarningThreshold();
+        }
+    });
 
     // Auto-refresh data every 60 seconds
     setInterval(() => {
