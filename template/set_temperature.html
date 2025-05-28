@@ -1,0 +1,210 @@
+<!-- templates/set_temperature.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary-blue: #1976D2;
+        --dark-blue: #0D47A1;
+        --sky-blue: #64B5F6;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --light-bg: #F5F9FF;
+        --dark-text: #2C3E50;
+        --success-green: #4CAF50;
+        --warning-orange: #FF9800;
+        --error-red: #F44336;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+        --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
+        --shadow-lg: 0 10px 25px rgba(0,0,0,0.2);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        background-image: url("{% static 'images/bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        position: relative;
+        color: var(--white);
+        margin: 0;
+        padding: 0;
+    }
+
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 71, 161, 0.7);
+        z-index: -1;
+    }
+
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        padding-top: 100px;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 600px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+
+    }
+
+    h1 {
+        color: var(--white);
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 1.5rem;
+    }
+
+    .current-limit {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        color: var(--white);
+        border-left: 4px solid var(--sky-blue);
+    }
+
+    input[type="number"] {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+        box-sizing: border-box;
+        transition: var(--transition);
+        text-align: center;
+    }
+
+    input[type="number"]:focus {
+        border-color: var(--sky-blue);
+        box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        background: rgba(255, 255, 255, 0.15);
+        outline: none;
+        transform: translateY(-2px);
+    }
+
+    button {
+        background: linear-gradient(135deg, var(--primary-blue), #764ba2);
+        color: var(--white);
+        padding: 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 100%;
+        font-weight: 600;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .message {
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        font-size: 0.95rem;
+    }
+
+    .success {
+        background: rgba(76, 175, 80, 0.2);
+        color: var(--white);
+        border: 1px solid rgba(76, 175, 80, 0.4);
+    }
+
+    .error {
+        background: rgba(244, 67, 54, 0.2);
+        color: var(--white);
+        border: 1px solid rgba(244, 67, 54, 0.4);
+    }
+
+    .info {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        backdrop-filter: blur(5px);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.98); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>Alerte de Température</h1>
+        <p>Définissez quand vous souhaitez recevoir des alertes par e-mail</p>
+
+        <div class="current-limit">
+            <h3>Limite actuelle : {{ current_limit }}°C</h3>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input
+                type="number"
+                name="temperature_limit"
+                placeholder="Entrez la température (°C)"
+                step="0.1"
+                min="0"
+                max="100"
+                value="{{ current_limit }}"
+                required
+            >
+            <button type="submit">Définir la température d’alerte</button>
+        </form>
+
+        <div class="info">
+            <strong>Comment ça fonctionne :</strong><br>
+            Lorsque la température dépasse votre limite, tous les utilisateurs enregistrés recevront une alerte par e-mail instantanément !
+        </div>
+    </div>
+</div>
+{% endblock %}

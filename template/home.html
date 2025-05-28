@@ -19,7 +19,13 @@
             --light-gray: #F5F5F5;
             --light-bg: #F5F9FF;
             --dark-text: #2C3E50;
+            --success-green: #4CAF50;
+            --warning-orange: #FF9800;
+            --error-red: #F44336;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.2);
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -171,7 +177,14 @@
             width: 300px;
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: featureCardAppear 0.8s forwards;
         }
+
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.4s; }
+        .feature-card:nth-child(3) { animation-delay: 0.6s; }
 
         .feature-card:hover {
             transform: translateY(-10px);
@@ -196,209 +209,6 @@
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.8);
             line-height: 1.6;
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .auth-card {
-            display: flex;
-            background: var(--white);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.8s ease-in-out;
-        }
-
-        .auth-form {
-            flex: 1;
-            padding: 3rem;
-            background: var(--white);
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .auth-logo {
-            height: 60px;
-            margin-bottom: 1rem;
-        }
-
-        .auth-header h2 {
-            color: var(--dark-text);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .auth-header p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--dark-text);
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
-            outline: none;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: var(--primary-blue);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn:hover {
-            background: var(--dark-blue);
-            transform: translateY(-2px);
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .auth-footer a {
-            color: var(--primary-blue);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .auth-footer a:hover {
-            color: var(--dark-blue);
-            text-decoration: underline;
-        }
-
-        .auth-illustration {
-            flex: 1;
-            position: relative;
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .auth-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.8;
-        }
-
-        .illustration-overlay {
-            position: absolute;
-            bottom: 2rem;
-            left: 2rem;
-            color: var(--white);
-            text-align: left;
-        }
-
-        .illustration-overlay h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .illustration-overlay p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .alert {
-            padding: 12px 15px;
-            background: #FFEBEE;
-            color: #C62828;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        .alert.success {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .alert i {
-            margin-right: 8px;
-        }
-
-        /* Footer Section */
-        .footer {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2rem;
-            margin-top: 3rem;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-link:hover {
-            color: var(--sky-blue);
-        }
-
-        .footer-link i {
-            margin-right: 8px;
-        }
-
-        .footer-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 1rem;
         }
 
         /* Tech Specs Section */
@@ -446,43 +256,378 @@
             line-height: 1.6;
         }
 
+        /* Footer Section */
+        .footer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-link:hover {
+            color: var(--sky-blue);
+        }
+
+        .footer-link i {
+            margin-right: 8px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Login Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            animation: witherIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .auth-form {
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo {
+            height: 60px;
+            margin-bottom: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .auth-header h2 {
+            margin-bottom: 0.5rem;
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .auth-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            backdrop-filter: blur(10px);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--white);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--sky-blue);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-footer a {
+            color: var(--sky-blue);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .auth-footer a:hover {
+            color: var(--white);
+            text-shadow: 0 0 10px var(--sky-blue);
+        }
+
+        /* Auth Illustration */
+        .auth-illustration {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .auth-illustration::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            animation: rotate 20s linear infinite;
+        }
+
+        .illustration-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            color: var(--white);
+        }
+
+        .illustration-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--sky-blue);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .illustration-content h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .illustration-content p {
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .feature-list i {
+            color: var(--sky-blue);
+            width: 16px;
+        }
+
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Responsive Design */
+        @keyframes witherIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes featureCardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(390deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .auth-card {
-                flex-direction: column;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 0.8rem;
+                grid-template-columns: 1fr;
+                margin: 1rem;
             }
 
             .auth-illustration {
-                display: none;
+                order: -1;
+                min-height: 200px;
             }
 
-            .features {
-                flex-direction: column;
-                align-items: center;
+            .auth-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .illustration-content {
+                padding: 1.5rem;
+            }
+
+            .illustration-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .feature-list {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 1rem;
+            }
+
+            .auth-form {
+                padding: 1.5rem 1rem;
             }
         }
     </style>
@@ -493,57 +638,23 @@
         <div class="header-banner">
             <p>Système de surveillance en temps réel utilisant <span class="highlight">DHT11</span> et <span class="highlight">ESP8266</span> - Précision et fiabilité pour votre environnement</p>
         </div>
+              <div class="hero">
+            <h1>Système de Surveillance DHT11</h1>
+            <p>Surveillance en temps réel des données environnementales avec analyse automatisée et alertes.</p>
 
-        <div class="hero">
-            {% if not user.is_authenticated %}
-<div class="login-box" style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; max-width: 400px; margin: 20px auto;">
-    <h3 style="color: white; text-align: center;"><i class="fas fa-sign-in-alt"></i> Login</h3>
-
-    {% if messages %}
-    <div class="alert" style="color: #ffcccc; margin-bottom: 15px;">
-        {% for message in messages %}
-        <i class="fas fa-exclamation-circle"></i> {{ message }}
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <div style="margin-bottom: 15px;">
-            <input type="text" name="username" placeholder="Username" required
-                   style="width: 100%; padding: 10px; border-radius: 5px; border: none;">
-        </div>
-        <div style="margin-bottom: 15px;">
-            <input type="password" name="password" placeholder="Password" required
-                   style="width: 100%; padding: 10px; border-radius: 5px; border: none;">
-        </div>
-        <button type="submit"
-                style="width: 100%; padding: 10px; background: var(--primary-blue); color: white; border: none; border-radius: 5px; cursor: pointer;">
-            <i class="fas fa-sign-in-alt"></i> Login
-        </button>
-    </form>
-    <p style="text-align: center; margin-top: 15px; color: white;">
-        No account? <a href="{% url 'register' %}" style="color: var(--sky-blue);">Register</a>
-    </p>
-</div>
-{% else %}
-<div style="text-align: center; margin: 20px 0;">
-    <p style="color: white;">Welcome, {{ user.username }}!</p>
-    <a href="{% url 'logout' %}" class="cta-button secondary" style="display: inline-block;">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-</div>
-{% endif %}
+     {% if user.is_authenticated %}
+         <div style="text-align: center; margin: 20px 0;">
             <div class="cta-buttons">
                 <a href="{% url 'table' %}" class="cta-button">
                     <i class="fas fa-chart-line"></i> Voir le Tableau de Bord
                 </a>
-                <a href="#features" class="cta-button secondary">
-                    <i class="fas fa-info-circle"></i> En Savoir Plus
-                </a>
+             <a href="{% url 'logout' %}" class="cta-button secondary" style="display: inline-block;">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                  </a>
             </div>
-        </div>
-        <!-- Features Section -->
+        </div> </div>
+        {% endif %}
+    <!-- Features Section -->
         <div class="features" id="features">
             <div class="feature-card">
                 <div class="feature-icon">
@@ -570,29 +681,91 @@
             </div>
         </div>
 
-        <!-- Tech Specs Section -->
-        <div class="tech-specs">
-            <h2><i class="fas fa-microchip"></i> Avantages Techniques</h2>
-            <div class="spec-grid">
-                <div class="spec-item">
-                    <h3 class="spec-title">DHT11 - Capteur Fiable</h3>
-                    <p class="spec-desc">Le capteur DHT11 offre une solution économique pour la surveillance environnementale avec une excellente stabilité à long terme.</p>
+        {% if not user.is_authenticated %}
+        <div class="auth-container">
+            <div class="auth-card">
+                <!-- Login Form -->
+                <div class="auth-form">
+                    <div class="auth-header">
+
+                        <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+                        <p>Accédez à votre tableau de bord</p>
+                    </div>
+
+                    {% if login_form.errors %}
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Veuillez corriger les erreurs ci-dessous.</span>
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Wrap Django form fields in styled containers -->
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="username">
+                                    <i class="fas fa-user"></i> Nom d'utilisateur
+                                </label>
+                                <input type="text" name="username" id="username" placeholder="Entrez votre nom d'utilisateur" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">
+                                    <i class="fas fa-lock"></i> Mot de passe
+                                </label>
+                                <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Se connecter</span>
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Pas de compte ? <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> S'inscrire ici</a></p>
+                        <p><a href="#"><i class="fas fa-question-circle"></i> Mot de passe oublié ?</a></p>
+                    </div>
                 </div>
-                <div class="spec-item">
-                    <h3 class="spec-title">ESP8266 - Puissance IoT</h3>
-                    <p class="spec-desc">L'ESP8266 combine processeur, Wi-Fi et mémoire flash, idéal pour les projets IoT avec faible consommation d'énergie.</p>
-                </div>
-                <div class="spec-item">
-                    <h3 class="spec-title">Applications</h3>
-                    <p class="spec-desc">Idéal pour les serres, les entrepôts, les bureaux et les environnements domestiques nécessitant un contrôle climatique.</p>
-                </div>
-                <div class="spec-item">
-                    <h3 class="spec-title">Bénéfices</h3>
-                    <p class="spec-desc">Prévention des dommages matériels, optimisation énergétique, conformité aux normes de stockage et amélioration du confort.</p>
+
+                <!-- Auth Illustration -->
+                <div class="auth-illustration">
+                    <div class="illustration-content">
+                        <div class="illustration-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Système de Surveillance DHT11</h3>
+                        <p>Surveillance des données environnementales en temps réel avec analyse automatisée et alertes.</p>
+
+                        <ul class="feature-list">
+                            <li>
+                                <i class="fas fa-thermometer-half"></i>
+                                <span>Température en temps réel</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tint"></i>
+                                <span>Mesure précise de l'humidité</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-bell"></i>
+                                <span>Alertes automatisées</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-chart-line"></i>
+                                <span>Analyse des données</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-wifi"></i>
+                                <span>Connectivité IoT</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-
+  {% endif %}
         <!-- Footer -->
         <div class="footer" id="support">
             <div class="footer-links">
@@ -615,5 +788,53 @@
             </p>
         </div>
     </div>
+
+    <script>
+    // Animation d'entrée pour les éléments du formulaire
+    document.addEventListener('DOMContentLoaded', function() {
+        const formElements = document.querySelectorAll('.form-group, .btn, .auth-footer');
+        formElements.forEach((element, index) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                element.style.transition = 'all 0.5s ease';
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, index * 100 + 300);
+        });
+
+        // Effet de focus amélioré pour les inputs
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Handle form submission
+        const form = document.querySelector('form');
+        const submitBtn = document.querySelector('.btn-primary');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(e) {
+                // Don't prevent default - let form submit normally
+                if (form.checkValidity()) {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion en cours...';
+                    submitBtn.disabled = true;
+
+                    // Re-enable button after 5 seconds in case of error
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>Se connecter</span>';
+                        submitBtn.disabled = false;
+                    }, 5000);
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

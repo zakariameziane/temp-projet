@@ -7,6 +7,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from twilio.rest import Client
 import requests
+from .models import User
+from .models import Dht11, User, AlertSetting
+
 # Définir la fonction pour envoyer des messages Telegram
 def send_telegram_message(token, chat_id, message):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
@@ -36,13 +39,29 @@ def Dlist(request):
                 derniere_temperature = Dht11.objects.last().temp
                 print(derniere_temperature)
 
-                if derniere_temperature > 25:
+                # GET DYNAMIC TEMPERATURE THRESHOLD - THIS IS THE ONLY CHANGE
+                try:
+                    alert_setting = AlertSetting.objects.get(id=1)
+                    temperature_threshold = alert_setting.temperature_limit
+                except AlertSetting.DoesNotExist:
+                    temperature_threshold = 30  # fallback to 25 if not set
+
+                # Use dynamic threshold instead of hardcoded 25
+                if derniere_temperature > temperature_threshold:
                     # Alert Email
-                    subject = 'Alerte'
-                    message = 'La température dépasse le seuil de 25°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation'
-                    email_from = settings.EMAIL_HOST_USER
-                    recipient_list = ['zakariameziane66@gmail.com']
-                    send_mail(subject, message, email_from, recipient_list)
+                    registered_users = User.objects.all()
+                    recipient_list = [user.email for user in registered_users if user.email]
+
+                    # Only send if there are users with email addresses
+                    if recipient_list:
+                        # Alert Email
+                        subject = 'Alerte Température'
+                        message = 'La température dépasse le seuil de°C, veuillez intervenir immédiatement pour vérifier et corriger cette situation'
+                        email_from = settings.EMAIL_HOST_USER
+
+                        send_mail(subject, message, email_from, recipient_list)
+                    else:
+                        print("No registered users with email addresses found")
 
                     # Alert WhatsApp
                     account_sid = 'ACf77afb527416756f5d618382c3f58938'

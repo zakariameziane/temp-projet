@@ -29,5 +29,5 @@ urlpatterns = [
     path("login/", login_request, name="login"),
     path("logout/", logout_request, name="logout"),
 
-
+    path('set_temperature/', views.set_temperature_limit, name='set_temperature'),
 ]

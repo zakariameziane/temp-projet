@@ -234,7 +234,7 @@
         <ul class="navbar-nav">
             <li>
                 <a href="{% url 'table' %}" class="nav-link {% if request.path == '/table/' %}active{% endif %}">
-                    <i class="fas fa-table"></i> Tableau de Données
+                    <i class="fas fa-table"></i> Tableau
                 </a>
             </li>
             <li>
@@ -245,6 +245,11 @@
             <li>
                 <a href="{% url 'myChartHum' %}" class="nav-link {% if request.path == '/chart-hum/' %}active{% endif %}">
                     <i class="fas fa-tint"></i> Humidité
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'set_temperature' %}" class="nav-link {% if request.path == '/alert/' %}active{% endif %}">
+                    <i class="fas fa-exclamation-triangle"></i> Alerte
                 </a>
             </li>
         </ul>

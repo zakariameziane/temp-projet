@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Dht11
+from .models import Dht11, AlertSetting
 from django.utils import timezone
 import csv
 from django.http import HttpResponse, JsonResponse
@@ -32,6 +32,26 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
+
+def set_temperature_limit (request):
+    # Get current setting or create default
+    setting, created = AlertSetting.objects.get_or_create(
+        id=1,
+        defaults={'temperature_limit': 25.0}
+    )
+
+    if request.method == 'POST':
+        new_limit = request.POST.get('temperature_limit')
+        try:
+            setting.temperature_limit = float(new_limit)
+            setting.save()
+            messages.success(request, f'Temperature limit set to {new_limit}°C')
+        except ValueError:
+            messages.error(request, 'Please enter a valid number')
+
+    return render(request, 'set_temperature.html', {
+        'current_limit': setting.temperature_limit
+    })
 def table(request):
     derniere_ligne = Dht11.objects.last()
     derniere_date = Dht11.objects.last().dt

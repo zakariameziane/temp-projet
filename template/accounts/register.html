@@ -256,7 +256,6 @@
 
             <form method="post" class="register-form">
                 {% csrf_token %}
-
                 <div class="form-group">
                     <input type="text" name="username" placeholder="Username" required>
                     {% if register_form.username.errors %}
