@@ -123,6 +123,12 @@
         background: #64B5F6;
     }
 
+    .navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
     .navbar-actions .btn {
         padding: 0.6rem 1.2rem;
         border-radius: 8px;
@@ -160,6 +166,101 @@
         transform: translateY(-2px);
     }
 
+    /* User Display Styles */
+    .user-display {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 0.5rem 1rem;
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-display::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .user-display:hover::before {
+        left: 100%;
+    }
+
+    .user-display:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #64B5F6, #1976D2, #0D47A1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .user-avatar::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+        opacity: 0;
+    }
+
+    .user-display:hover .user-avatar::after {
+        opacity: 1;
+        transform: rotate(45deg) translate(25%, 25%);
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.2;
+        background: linear-gradient(to right, #ffffff, #E3F2FD);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .user-role {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        line-height: 1;
+        margin-top: 2px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
     .navbar-toggle {
         display: none;
         background: none;
@@ -195,15 +296,40 @@
             display: none;
             width: 100%;
             margin-top: 1rem;
-            text-align: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .navbar-actions.show {
-            display: block;
+            display: flex;
+        }
+
+        .user-display {
+            order: -1;
+            margin-bottom: 0.5rem;
         }
 
         .navbar-toggle {
             display: block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .user-info {
+            display: none;
+        }
+
+        .user-display {
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            margin-right: 0;
         }
     }
 
@@ -222,13 +348,30 @@
     .navbar.scrolled {
         animation: fadeInDown 0.5s ease forwards;
     }
+
+    /* Pulse animation for user avatar */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+        }
+        70% {
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+    }
+
+    .user-avatar {
+        animation: pulse 3s infinite;
+    }
 </style>
 
 <nav class="navbar">
     <div class="navbar-container">
         <a href="{% url 'index' %}" class="navbar-brand">
             <i class="fas fa-thermometer-half"></i>
-            <span>Surveillance DHT11</span>
+            <span>DHT11</span>
         </a>
 
         <ul class="navbar-nav">
@@ -256,6 +399,29 @@
 
         <div class="navbar-actions">
             {% if user.is_authenticated %}
+                <div class="user-display">
+                    <div class="user-avatar">
+                        {{ user.first_name|first|default:user.username|first|upper }}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">
+                            {% if user.first_name %}
+                                {{ user.first_name }} {{ user.last_name|default:"" }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </div>
+                        <div class="user-role">
+                            {% if user.is_superuser %}
+                                Administrateur
+                            {% elif user.is_staff %}
+                                Staff
+                            {% else %}
+                                Utilisateur
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
                 <a href="{% url 'logout' %}" class="btn btn-outline">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
@@ -298,5 +464,18 @@
                 toggleNavbar();
             }
         });
+    });
+
+    // Add welcome message animation (optional)
+    document.addEventListener('DOMContentLoaded', function() {
+        const userDisplay = document.querySelector('.user-display');
+        if (userDisplay) {
+            setTimeout(() => {
+                userDisplay.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    userDisplay.style.transform = 'scale(1)';
+                }, 200);
+            }, 500);
+        }
     });
 </script>

@@ -5,24 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8d621e7-31d8-4414-a321-4d38e7baa1f5" name="Changes" comment="temp prjt">
-      <change afterPath="$PROJECT_DIR$/template/set_temperature.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DHT/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/DHT/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DHT/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DHT/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DHT/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/DHT/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DHT/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DHT/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/auth.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/auth.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/charts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/ChartHum.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/ChartHum.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/ChartTemp.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/ChartTemp.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/accounts/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/accounts/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/accounts/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/accounts/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/navBar.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/navBar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template/table.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/table.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +131,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748266512279</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="temp prjt">
+      <option name="closed" value="true" />
+      <created>1748459454755</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1748459454755</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

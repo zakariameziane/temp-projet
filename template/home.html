@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de Bord IoT - Surveillance Environnementale</title>
@@ -22,6 +21,7 @@
             --success-green: #4CAF50;
             --warning-orange: #FF9800;
             --error-red: #F44336;
+            --demo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
             --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
@@ -36,11 +36,9 @@
         }
 
         body {
-            background-image: url("{% static 'images/bg.jpg' %}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             font-family: 'Poppins', sans-serif;
             color: var(--white);
             min-height: 100vh;
@@ -58,7 +56,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(13, 71, 161, 0.7);
+            background: rgba(13, 71, 161, 0.3);
             z-index: -1;
         }
 
@@ -121,6 +119,8 @@
             display: flex;
             gap: 1rem;
             margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .cta-button {
@@ -137,6 +137,8 @@
             justify-content: center;
             transition: var(--transition);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
 
         .cta-button:hover {
@@ -152,6 +154,58 @@
 
         .cta-button.secondary:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Demo Button - Special Styling */
+        .demo-button {
+            background: var(--demo-gradient);
+            background-size: 200% 200%;
+            animation: gradientPulse 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        }
+
+        .demo-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .demo-button:hover::before {
+            animation: shimmer 0.8s ease-in-out;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            background-position: right center;
+        }
+
+        .demo-button .demo-text {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
         }
 
         .cta-button i {
@@ -211,97 +265,14 @@
             line-height: 1.6;
         }
 
-        /* Tech Specs Section */
-        .tech-specs {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            max-width: 800px;
-        }
-
-        .tech-specs h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-            color: var(--white);
-        }
-
-        .spec-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .spec-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            transition: var(--transition);
-        }
-
-        .spec-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .spec-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--sky-blue);
-        }
-
-        .spec-desc {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-        }
-
-        /* Footer Section */
-        .footer {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2rem;
-            margin-top: 3rem;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-link:hover {
-            color: var(--sky-blue);
-        }
-
-        .footer-link i {
-            margin-right: 8px;
-        }
-
-        .footer-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-
         /* Login Styles */
         .auth-container {
-            min-height: 100vh;
+            min-height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
+            margin-top: 2rem;
         }
 
         .auth-card {
@@ -547,6 +518,70 @@
             width: 16px;
         }
 
+        /* Footer Section */
+        .footer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-link:hover {
+            color: var(--sky-blue);
+        }
+
+        .footer-link i {
+            margin-right: 8px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Register Prompt */
+        .register-prompt {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-md);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .register-prompt p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .register-prompt .highlight {
+            color: var(--sky-blue);
+            font-weight: 600;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
@@ -592,6 +627,28 @@
             50% { transform: translateY(-10px); }
         }
 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes gradientPulse {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0; transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .auth-card {
@@ -619,6 +676,15 @@
             .feature-list {
                 display: none;
             }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-button {
+                width: 280px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -629,6 +695,15 @@
             .auth-form {
                 padding: 1.5rem 1rem;
             }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -638,23 +713,48 @@
         <div class="header-banner">
             <p>Système de surveillance en temps réel utilisant <span class="highlight">DHT11</span> et <span class="highlight">ESP8266</span> - Précision et fiabilité pour votre environnement</p>
         </div>
-              <div class="hero">
+
+        <div class="hero">
             <h1>Système de Surveillance DHT11</h1>
             <p>Surveillance en temps réel des données environnementales avec analyse automatisée et alertes.</p>
-
-     {% if user.is_authenticated %}
-         <div style="text-align: center; margin: 20px 0;">
+{% if not user.is_authenticated %}
+            <!-- Universal Demo Button (visible to all users) -->
             <div class="cta-buttons">
-                <a href="{% url 'table' %}" class="cta-button">
-                    <i class="fas fa-chart-line"></i> Voir le Tableau de Bord
+                <a href="/table/" class="cta-button demo-button">
+                    <div class="demo-text">
+                        <i class="fas fa-play"></i>
+                        <span>Essayer la Démo</span>
+                        <span class="demo-badge">sans alerts</span>
+                    </div>
                 </a>
-             <a href="{% url 'logout' %}" class="cta-button secondary" style="display: inline-block;">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                  </a>
+                <a href="#auth-container" class="cta-button secondary" id="register-scroll-btn">
+                    <i class="fas fa-user-plus"></i> se connecter
+                </a>
+                <a href="register/" class="cta-button secondary" >
+                <i class="fas fa-user-plus"></i>  S'inscrire ici
+            </a>
+                  <div class="register-prompt">
+            <p><span class="highlight">Crée un compte</span> pour recevoir les alertes de sécurité en temps réel et accéder à toutes les fonctionnalités avancées.</p>
+
+        </div>
+                {% endif %}
             </div>
-        </div> </div>
-        {% endif %}
-    <!-- Features Section -->
+
+            {% if user.is_authenticated %}
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="cta-buttons">
+                        <a href="{% url 'table' %}" class="cta-button">
+                            <i class="fas fa-chart-line"></i> Voir le Tableau de Bord
+                        </a>
+                        <a href="{% url 'logout' %}" class="cta-button secondary" style="display: inline-block;">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Features Section -->
         <div class="features" id="features">
             <div class="feature-card">
                 <div class="feature-icon">
@@ -682,12 +782,11 @@
         </div>
 
         {% if not user.is_authenticated %}
-        <div class="auth-container">
+        <div class="auth-container" id="auth-container">
             <div class="auth-card">
                 <!-- Login Form -->
                 <div class="auth-form">
                     <div class="auth-header">
-
                         <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
                         <p>Accédez à votre tableau de bord</p>
                     </div>
@@ -765,14 +864,15 @@
                 </div>
             </div>
         </div>
-  {% endif %}
+        {% endif %}
+
         <!-- Footer -->
         <div class="footer" id="support">
             <div class="footer-links">
                 <a href="#features" class="footer-link">
                     <i class="fas fa-info-circle"></i> Fonctionnalités
                 </a>
-                <a href="#signup" class="footer-link">
+                <a href="#auth-container" class="footer-link">
                     <i class="fas fa-user-plus"></i> Inscription
                 </a>
                 <a href="mailto:support@iotdashboard.com" class="footer-link">
@@ -825,15 +925,21 @@
                 if (form.checkValidity()) {
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion en cours...';
                     submitBtn.disabled = true;
-
-                    // Re-enable button after 5 seconds in case of error
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>Se connecter</span>';
-                        submitBtn.disabled = false;
-                    }, 5000);
                 }
             });
         }
+
+        // Smooth scroll to auth section
+        const registerButtons = document.querySelectorAll('#register-scroll-btn, #register-link-btn');
+        registerButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const authSection = document.getElementById('auth-container');
+                if (authSection) {
+                    authSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
     });
     </script>
 </body>
