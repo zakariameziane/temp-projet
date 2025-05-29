@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template/navBar.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/navBar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template/set_temperature.html" beforeDir="false" afterPath="$PROJECT_DIR$/template/set_temperature.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +140,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748459454755</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="temp prjt">
+      <option name="closed" value="true" />
+      <created>1748465578708</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1748465578708</updated>
+    </task>
+    <task id="LOCAL-00009" summary="temp prjt">
+      <option name="closed" value="true" />
+      <created>1748465587929</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1748465587929</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

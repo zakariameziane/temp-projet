@@ -166,6 +166,86 @@
         transform: translateY(-2px);
     }
 
+    /* Logout Icon Button Styles */
+    .logout-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+    }
+
+    .logout-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .logout-btn:hover::before {
+        left: 100%;
+    }
+
+    .logout-btn:hover {
+        background: rgba(244, 67, 54, 0.8);
+        border-color: rgba(244, 67, 54, 0.8);
+        transform: translateY(-2px) rotate(15deg);
+        box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+    }
+
+    .logout-btn i {
+        font-size: 1.1rem;
+        margin: 0;
+        transition: transform 0.3s ease;
+    }
+
+    .logout-btn:hover i {
+        transform: scale(1.1);
+    }
+
+    /* Tooltip for logout button */
+    .logout-btn {
+        position: relative;
+    }
+
+    .logout-btn::after {
+        content: 'Déconnexion';
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 1001;
+    }
+
+    .logout-btn:hover::after {
+        opacity: 1;
+        visibility: visible;
+        bottom: -40px;
+    }
+
     /* User Display Styles */
     .user-display {
         display: flex;
@@ -313,6 +393,11 @@
         .navbar-toggle {
             display: block;
         }
+
+        /* Mobile logout button adjustments */
+        .logout-btn::after {
+            display: none;
+        }
     }
 
     @media (max-width: 480px) {
@@ -422,8 +507,8 @@
                         </div>
                     </div>
                 </div>
-                <a href="{% url 'logout' %}" class="btn btn-outline">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                <a href="{% url 'logout' %}" class="logout-btn">
+                    <i class="fas fa-power-off"></i>
                 </a>
             {% else %}
                 <a href="{% url 'login' %}" class="btn">

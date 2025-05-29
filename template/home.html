@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        :root {
+       :root {
             --primary-blue: #1976D2;
             --dark-blue: #0D47A1;
             --sky-blue: #64B5F6;
@@ -22,6 +22,10 @@
             --warning-orange: #FF9800;
             --error-red: #F44336;
             --demo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --login-gradient: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            --register-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dashboard-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --logout-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
             --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
@@ -118,7 +122,7 @@
         .cta-buttons {
             display: flex;
             gap: 1rem;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -139,24 +143,15 @@
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .cta-button:hover {
-            background: var(--sky-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .cta-button.secondary {
-            background: transparent;
-            border: 2px solid var(--white);
-        }
-
-        .cta-button.secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Demo Button - Special Styling */
+        /* Demo Button - Original Styling */
         .demo-button {
             background: var(--demo-gradient);
             background-size: 200% 200%;
@@ -190,7 +185,145 @@
             background-position: right center;
         }
 
-        .demo-button .demo-text {
+        /* Login Button */
+        .login-button {
+            background: var(--login-gradient);
+            background-size: 200% 200%;
+            animation: gradientPulse 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(67, 206, 162, 0.3);
+            box-shadow: 0 8px 32px rgba(67, 206, 162, 0.4);
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .login-button:hover::before {
+            animation: shimmer 0.8s ease-in-out;
+        }
+
+        .login-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(67, 206, 162, 0.6);
+            background-position: right center;
+        }
+
+        /* Register Button */
+        .register-button {
+            background: var(--register-gradient);
+            background-size: 200% 200%;
+            animation: gradientPulse 3.5s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(250, 112, 154, 0.3);
+            box-shadow: 0 8px 32px rgba(250, 112, 154, 0.4);
+        }
+
+        .register-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .register-button:hover::before {
+            animation: shimmer 0.8s ease-in-out;
+        }
+
+        .register-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(250, 112, 154, 0.6);
+            background-position: right center;
+        }
+
+        /* Dashboard Button */
+        .dashboard-button {
+            background: var(--dashboard-gradient);
+            background-size: 200% 200%;
+            animation: gradientPulse 4.5s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(168, 237, 234, 0.3);
+            box-shadow: 0 8px 32px rgba(168, 237, 234, 0.4);
+            color: var(--dark-text);
+        }
+
+        .dashboard-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .dashboard-button:hover::before {
+            animation: shimmer 0.8s ease-in-out;
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(168, 237, 234, 0.6);
+            background-position: right center;
+        }
+
+        /* Logout Button */
+        .logout-button {
+            background: var(--logout-gradient);
+            background-size: 200% 200%;
+            animation: gradientPulse 3.2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 154, 158, 0.3);
+            box-shadow: 0 8px 32px rgba(255, 154, 158, 0.4);
+            color: var(--dark-text);
+        }
+
+        .logout-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .logout-button:hover::before {
+            animation: shimmer 0.8s ease-in-out;
+        }
+
+        .logout-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 154, 158, 0.6);
+            background-position: right center;
+        }
+
+        .demo-text, .button-text {
             position: relative;
             z-index: 2;
             display: flex;
@@ -198,7 +331,7 @@
             gap: 0.5rem;
         }
 
-        .demo-badge {
+        .demo-badge, .login-badge {
             background: rgba(255, 255, 255, 0.2);
             padding: 2px 8px;
             border-radius: 12px;
@@ -211,6 +344,67 @@
         .cta-button i {
             margin-right: 8px;
             font-size: 1.1rem;
+        }
+
+        /* Register Prompt - Repositioned and Styled */
+        .register-prompt {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            animation: floatIn 1s ease-out;
+        }
+
+        .register-prompt::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            animation: rotate 25s linear infinite;
+        }
+
+        .register-prompt-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .register-prompt .register-icon {
+            font-size: 3rem;
+            color: var(--sky-blue);
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .register-prompt h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .register-prompt p {
+            margin-bottom: 0;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .register-prompt .highlight {
+            color: var(--sky-blue);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(100, 181, 246, 0.3);
         }
 
         /* Features Section */
@@ -557,35 +751,21 @@
             margin-top: 1rem;
         }
 
-        /* Register Prompt */
-        .register-prompt {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-md);
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .register-prompt p {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: var(--white);
-        }
-
-        .register-prompt .highlight {
-            color: var(--sky-blue);
-            font-weight: 600;
-        }
-
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         @keyframes slideIn {
@@ -685,6 +865,11 @@
             .cta-button {
                 width: 280px;
             }
+
+            .register-prompt {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -704,6 +889,53 @@
                 width: 100%;
                 max-width: 300px;
             }
+
+            .register-prompt {
+                padding: 1rem;
+            }
+        }
+
+        /* Security Alert Banner */
+        .security-alert {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: slideIn 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security-alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.1), transparent);
+            animation: shimmerAlert 3s infinite;
+        }
+            .security-alert .alert-icon {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+     .security-alert h3 {
+            color: var(--white);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .security-alert p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -718,6 +950,7 @@
             <h1>Système de Surveillance DHT11</h1>
             <p>Surveillance en temps réel des données environnementales avec analyse automatisée et alertes.</p>
 {% if not user.is_authenticated %}
+
             <!-- Universal Demo Button (visible to all users) -->
             <div class="cta-buttons">
                 <a href="/table/" class="cta-button demo-button">
@@ -727,16 +960,21 @@
                         <span class="demo-badge">sans alerts</span>
                     </div>
                 </a>
-                <a href="#auth-container" class="cta-button secondary" id="register-scroll-btn">
-                    <i class="fas fa-user-plus"></i> se connecter
+                <a href="#auth-container" class="cta-button login-button " id="register-scroll-btn">
+                     <i class="fas fa-sign-in-alt"></i>
+                        <span>Se Connecter</span>
+                        <span class="login-badge">AVEC ALERTES</span>
                 </a>
                 <a href="register/" class="cta-button secondary" >
                 <i class="fas fa-user-plus"></i>  S'inscrire ici
             </a>
-                  <div class="register-prompt">
-            <p><span class="highlight">Crée un compte</span> pour recevoir les alertes de sécurité en temps réel et accéder à toutes les fonctionnalités avancées.</p>
-
-        </div>
+    <div class="security-alert">
+                <div class="alert-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Créez un compte pour recevoir les alertes de sécurité</h3>
+                <p>Obtenez des notifications automatiques lorsque les seuils de température et d'humidité sont dépassés</p>
+            </div>
                 {% endif %}
             </div>
 

@@ -1,4 +1,4 @@
-<!-- templates/set_temperature.html -->
+<<!-- templates/set_temperature.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -69,7 +69,6 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
         text-align: center;
         animation: fadeIn 1s ease-in-out;
-
     }
 
     h1 {
@@ -180,9 +179,12 @@
 
         {% if messages %}
             {% for message in messages %}
-                <div class="message {% if message.tags == 'success' %}success{% else %}error{% endif %}">
-                    {{ message }}
-                </div>
+                <!-- Only show temperature-related messages, filter out auth messages -->
+                {% if 'logged' not in message|lower and 'username' not in message|lower and 'password' not in message|lower %}
+                    <div class="message {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endif %}
             {% endfor %}
         {% endif %}
 
@@ -198,13 +200,14 @@
                 value="{{ current_limit }}"
                 required
             >
-            <button type="submit">Définir la température d’alerte</button>
+            <button type="submit">Définir la température d'alerte</button>
         </form>
 
         <div class="info">
             <strong>Comment ça fonctionne :</strong><br>
-            Lorsque la température dépasse votre limite, tous les utilisateurs enregistrés recevront une alerte par e-mail instantanément !
+            Lorsque la température dépasse votre limite, tous les utilisateurs enregistrés recevront une alerte par e-mail instantanément !
         </div>
     </div>
 </div>
+
 {% endblock %}
